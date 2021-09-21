@@ -10,7 +10,7 @@ import (
 // Read Data from data base
 
 func ShowUserData(c *gin.Context) {
-	var info models.Userinfo
+	var info[]  models.Userinfo
 	models.DB.Find(&info)
 
 	c.JSON(200, gin.H{"data": info})
