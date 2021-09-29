@@ -1,6 +1,8 @@
 package cantroller
 
 import (
+	//"fmt"
+	//"path/filepath"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -90,3 +92,6 @@ func DeleteData(c *gin.Context) {
 
 	c.JSON(200, gin.H{"data": true})
 }
+
+
+

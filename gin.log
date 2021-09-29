@@ -1,0 +1,3 @@
+[GIN-debug] GET    /purejson                 --> main.main.func1 (3 handlers)
+[GIN-debug] POST   /login                    --> main.go/services.Login (3 handlers)
+[GIN-debug] GET    /test                     --> main.main.func2 (3 handlers)
