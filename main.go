@@ -74,22 +74,23 @@ func main() {
 		c.JSON(200, gin.H{
 			"html": "<b>Hello, world!</b>",
 		})
-	})
+	 })
 
-	router.POST("/login",services.Login)
+	 router.POST("/login",services.Login)
 	router.GET("/test", func(c *gin.Context) {
-		c.Redirect(http.StatusMovedPermanently, "http://www.google.com/")
+		c.Redirect(302, "http://www.xenonstack.com/")
 	})
 	
-
+	router.GET("/Query", cantroller.GetQuery)
 	authorized := router.Group("/", middleware.BasicAuth())
-
-
-	authorized.GET("/getuser", cantroller.ShowUserData)
+	
+	//authorized.GET("/getuser", cantroller.ShowUserData)
 	authorized.PUT("/update/:id", cantroller.Updatedata)
 	
 	authorized.POST("/post", cantroller.Createdata)
+	authorized.POST("/post1", cantroller.CreatePerson)
 	authorized.DELETE("/delete/:id", cantroller.DeleteData)
+	authorized.DELETE("/delete1/:username", cantroller.DeleteData1)
 	
 	s.ListenAndServe()
 }

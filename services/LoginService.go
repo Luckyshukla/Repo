@@ -30,15 +30,21 @@ func Login(c *gin.Context) {
 	if err := models.DB.Where("username = ? AND password = ?",input.Username,input.Password).First(&user).Error; err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Please provide valid login detail"})
 		return 
-		//return nil, jwt.ErrorAuthenticationFailed
-	}
-	token, err := CreateToken(user.ID)
-  		if err != nil {
-     	c.JSON(http.StatusUnprocessableEntity, err.Error())
-     	return
-  	}
+	}else {
+		c.JSON(200, gin.H{
+			"First name":user.First_name,
+			"Last name": user.Last_name,
+			"Phone No.":user.Phone,
+		})
+		
+	 }
+	// token, err := CreateToken(user.ID)
+  	// 	if err != nil {
+    //  	c.JSON(http.StatusUnprocessableEntity, err.Error())
+    //  	return
+  	// }
 	  
-	  c.JSON(http.StatusOK, gin.H{"access token":token})
+	//   c.JSON(http.StatusOK, gin.H{"access token":token})
 }
 
 

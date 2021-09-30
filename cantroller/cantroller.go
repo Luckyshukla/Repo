@@ -1,7 +1,7 @@
 package cantroller
 
 import (
-	//"fmt"
+	"fmt"
 	//"path/filepath"
 	"net/http"
 
@@ -14,8 +14,8 @@ import (
 func ShowUserData(c *gin.Context) {
 	var info[]  models.Userinfo
 	models.DB.Find(&info)
-
-	c.JSON(200, gin.H{"data": info})
+	//c.JSON(200, gin.H{"data": info})
+	c.SecureJSON(http.StatusOK, info)
 }
 
 //Create User data
@@ -40,6 +40,17 @@ func Createdata(c *gin.Context) {
 	c.JSON(200, gin.H{"data": user})
 
 }
+
+
+
+
+func CreatePerson(c *gin.Context) {
+	var input CreateUserInput
+	c.BindJSON(&input)
+	user := models.Userinfo{First_name: input.First_name, Last_name: input.Last_name, Phone: input.Phone, Username: input.Username, Password: input.Password}
+	models.DB.Create(&user)
+	c.JSON(200, gin.H{"data":user})
+   }
 
 //Update data
 
@@ -68,20 +79,7 @@ func Updatedata(c *gin.Context) {
 	c.JSON(200, gin.H{"data": input})
 }
 
-// func Updatedata(c *gin.Context) {
-// 	var person UpdateUserdata
-// 	id := c.Params.ByName("Username")
-// 	if err := models.DB.Where("id = ?", id).First(&person).Error; err != nil {
-// 		c.AbortWithStatus(404)
-// 		fmt.Println(err)
-// 	}
-// 	c.BindJSON(&person)
-// 	models.DB.Save(&person)
-// 	//db.Save(&person)
-// 	c.JSON(200, person)
-// }
-
-//Delete data
+//Delete data With Chech if exist
 func DeleteData(c *gin.Context) {
 	var user models.Userinfo
 	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
@@ -94,4 +92,20 @@ func DeleteData(c *gin.Context) {
 }
 
 
+// Delete data without checking 
+func DeleteData1(c *gin.Context) {
+	username := c.Params.ByName("username")
+	var person models.Userinfo
+	d := models.DB.Where("username = ?", username).Delete(&person)
+	fmt.Println(d)
+	c.JSON(200, gin.H{"username #" + username: "deleted"})
+   }
 
+func GetQuery(c *gin.Context)  {
+	var user models.Userinfo
+	
+	if err := models.DB.Where("First_name = ? AND Last_name = ?",c.DefaultQuery("First_name", "Guest"),c.Query("Last_name")).First(&user).Error; err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Please provide valid detail"})
+		return 
+	}
+}
